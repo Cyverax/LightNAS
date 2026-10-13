@@ -1,0 +1,25 @@
+[Unit]
+Description=LightNAS privileged storage agent
+After=local-fs.target
+[Service]
+Type=simple
+User=root
+Group=lightnas
+WorkingDirectory=/opt/lightnas
+ExecStart=/usr/bin/node /opt/lightnas/src/server.js --agent
+Environment=NAS_AGENT_TOKEN_FILE=/etc/lightnas/agent.token
+Environment=NAS_JOB_DIR=/var/lib/lightnas-storage
+RuntimeDirectory=lightnas
+RuntimeDirectoryMode=0750
+RuntimeDirectoryPreserve=restart
+StateDirectory=lightnas-storage
+StateDirectoryMode=0700
+UMask=0077
+Restart=on-failure
+NoNewPrivileges=true
+ProtectSystem=strict
+ReadWritePaths=/etc/samba /etc/exports.d /var/lib/lightnas-storage /run/lightnas /var/lib/nfs
+ProtectHome=true
+PrivateTmp=true
+[Install]
+WantedBy=multi-user.target

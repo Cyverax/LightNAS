@@ -1,0 +1,26 @@
+[Unit]
+Description=LightNAS storage web control plane
+After=lightnas-storage.service
+Requires=lightnas-storage.service
+[Service]
+Type=simple
+User=lightnas
+Group=lightnas
+WorkingDirectory=/opt/lightnas
+ExecStart=/usr/bin/node /opt/lightnas/src/server.js
+Environment=NAS_AGENT_TOKEN_FILE=/etc/lightnas/agent.token
+Environment=NAS_AGENT_SOCKET=/run/lightnas/storage.sock
+Environment=NAS_JOB_DIR=/var/lib/lightnas
+Environment=NAS_HOST=127.0.0.1
+Environment=NAS_PORT=3080
+StateDirectory=lightnas
+StateDirectoryMode=0700
+Restart=on-failure
+NoNewPrivileges=true
+ProtectSystem=strict
+ProtectHome=true
+PrivateTmp=true
+RestrictSUIDSGID=true
+UMask=0077
+[Install]
+WantedBy=multi-user.target
